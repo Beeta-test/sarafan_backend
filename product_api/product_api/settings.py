@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'api',
-    'poduct',
+    'product',
 ]
 
 REST_FRAMEWORK = {
@@ -102,5 +102,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

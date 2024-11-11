@@ -4,29 +4,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class SubCategory(models.Model):
-    name = models.CharField('Наименование', max_length=256)
-    slug = models.SlugField('Идентицикатор', unique=True)
-    image = models.ImageField('Изображение', upload_to='subcategory/images')
-
-    class Meta:
-        verbose_name = 'Подкатегория'
-        verbose_name_plural = 'Подкатегории'
-        default_related_name = 'subcategories'
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class Category(models.Model):
     name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField('Идентицикатор', unique=True)
     image = models.ImageField('Изображение', upload_to='category/images')
-    subcategorys = models.ForeignKey(
-        SubCategory,
-        on_delete=models.CASCADE,
-        related_name='categoryies'
-    )
 
     class Meta:
         verbose_name = 'Категория'
@@ -37,17 +18,37 @@ class Category(models.Model):
         return self.name
 
 
+class SubCategory(models.Model):
+    name = models.CharField('Наименование', max_length=256)
+    slug = models.SlugField('Идентицикатор', unique=True)
+    image = models.ImageField('Изображение', upload_to='subcategory/images')
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='subcategories',
+        verbose_name='Категория'
+    )
+
+    class Meta:
+        verbose_name = 'Подкатегория'
+        verbose_name_plural = 'Подкатегории'
+        default_related_name = 'subcategories'
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField('Идентицикатор', unique=True)
     image = models.ImageField('Изображение', upload_to='products/images')
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
-    subcategorys = models.ForeignKey(
+    subcategory = models.ForeignKey(
         SubCategory,
         on_delete=models.CASCADE,
         related_name='products'
     )
-    categorys = models.ForeignKey(
+    category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         related_name='products'
@@ -68,11 +69,12 @@ class ShoppingList(models.Model):
         on_delete=models.CASCADE,
         related_name='shopping_lists'
     )
-    recipe = models.ForeignKey(
+    product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name='in_shopping_lists'
     )
+    quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
         constraints = [
@@ -85,4 +87,4 @@ class ShoppingList(models.Model):
         verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
-        return f'{self.user.username} - {self.product.name}'
+        return f'{self.user.username} - {self.product.name} (x{self.quantity})'
