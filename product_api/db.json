@@ -1,0 +1,74 @@
+[
+    {
+      "model": "product.category",
+      "pk": 1,
+      "fields": {
+        "name": "Electronics",
+        "slug": "electronics",
+        "image": "path/to/category/image.jpg"
+      }
+    },
+    {
+      "model": "product.category",
+      "pk": 2,
+      "fields": {
+        "name": "Clothing",
+        "slug": "clothing",
+        "image": "path/to/category/clothing.jpg"
+      }
+    },
+    {
+      "model": "product.subcategory",
+      "pk": 1,
+      "fields": {
+        "name": "Smartphones",
+        "slug": "smartphones",
+        "image": "path/to/subcategory/image.jpg",
+        "category": 1
+      }
+    },
+    {
+      "model": "product.subcategory",
+      "pk": 2,
+      "fields": {
+        "name": "Men's Clothing",
+        "slug": "mens-clothing",
+        "image": "path/to/subcategory/mens-clothing.jpg",
+        "category": 2
+      }
+    },
+    {
+      "model": "product.product",
+      "pk": 1,
+      "fields": {
+        "name": "iPhone 13",
+        "slug": "iphone-13",
+        "price": 999.99,
+        "image": "path/to/product/iphone-13.jpg",
+        "subcategory": 1,
+        "category": 1
+      }
+    },
+    {
+      "model": "product.product",
+      "pk": 2,
+      "fields": {
+        "name": "Men's Shirt",
+        "slug": "mens-shirt",
+        "price": 29.99,
+        "image": "path/to/product/mens-shirt.jpg",
+        "subcategory": 2,
+        "category": 2
+      }
+    },
+    {
+      "model": "product.shoppinglist",
+      "pk": 1,
+      "fields": {
+        "user": 1,
+        "product": 1,
+        "quantity": 2
+      }
+    }
+  ]
+  

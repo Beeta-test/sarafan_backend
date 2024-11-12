@@ -3,28 +3,40 @@ from rest_framework import viewsets, decorators, permissions, response, status
 from product.models import Product, Category, SubCategory, ShoppingList
 from .permissions import IsAuthorOrReadOnly
 from .paginations import LimitPageNumberPagination
-from .serializers import CategorySerializer, SubCategorySerializer, ProductSerializer, ShoppingListSerializer
+from .serializers import (CategorySerializer, SubCategorySerializer,
+                          ProductSerializer, ShoppingListSerializer)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
 
 class SubCategoryViewSet(viewsets.ModelViewSet):
-    queryset = SubCategory.objects.all()
+    queryset = SubCategory.objects.all().order_by('name')
     serializer_class = SubCategorySerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('name')
     serializer_class = ProductSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPageNumberPagination
+
+
+class ShoppingListViewSet(viewsets.ModelViewSet):
+    serializer_class = ShoppingListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ShoppingList.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     def remove_item(self, model, request, pk=None):
         product = self.get_object()
@@ -55,6 +67,27 @@ class ProductViewSet(viewsets.ModelViewSet):
         )
 
     @decorators.action(
+        detail=False,
+        methods=['delete'],
+        permission_classes=[permissions.IsAuthenticated],
+        url_path='clear'
+    )
+    def clear_list(self, request):
+        user = request.user
+        delete_count, _ = ShoppingList.objects.filter(user=user).delete()
+
+        if delete_count == 0:
+            return response.Response(
+                "Корзина уже пуста.",
+                status=status.HTTP_200_OK
+            )
+
+        return response.Response(
+            f"Удалено {delete_count} товаров из корзины.",
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+    @decorators.action(
         detail=True,
         methods=['post'],
         permission_classes=(permissions.IsAuthenticated,)
@@ -64,5 +97,5 @@ class ProductViewSet(viewsets.ModelViewSet):
         return self.add_to_list(ShoppingListSerializer, request, product)
 
     @shopping_list.mapping.delete
-    def remove_from_shopping_cart(self, request, pk=None):
+    def remove_from_shopping_list(self, request, pk=None):
         return self.remove_item(ShoppingList, request, pk)

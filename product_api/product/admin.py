@@ -15,7 +15,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'image', 'price', 'subcategory', 'category')
-    list_display = ('name', 'slug', 'image', 'price', 'subcategory', 'category')
+    search_fields = ('name', 'slug', 'image', 'price', 'subcategory', 'category')
 
 
 admin.site.register(Category, CategoryAdmin)

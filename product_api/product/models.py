@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from versatileimagefield.fields import VersatileImageField, PPOIField
 
 User = get_user_model()
 
@@ -26,7 +27,8 @@ class SubCategory(models.Model):
         Category,
         on_delete=models.CASCADE,
         related_name='subcategories',
-        verbose_name='Категория'
+        verbose_name='Категория',
+        null=True,
     )
 
     class Meta:
@@ -41,7 +43,8 @@ class SubCategory(models.Model):
 class Product(models.Model):
     name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField('Идентицикатор', unique=True)
-    image = models.ImageField('Изображение', upload_to='products/images')
+    image = VersatileImageField('Изображение', upload_to='products/images')
+    ppoi = PPOIField()
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
     subcategory = models.ForeignKey(
         SubCategory,
@@ -88,3 +91,6 @@ class ShoppingList(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name} (x{self.quantity})'
+
+    def get_total_price(self):
+        return self.product.price * self.quantity
