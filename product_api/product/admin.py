@@ -4,18 +4,24 @@ from .models import Category, SubCategory, Product
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'image')
-    search_fields = ('name', 'slug', 'image')
+    list_display = (
+        'name', 'slug', 'image')
+    search_fields = (
+        'name', 'slug', 'image')
 
 
 class SubCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'image')
-    search_fields = ('name', 'slug', 'image')
+    list_display = (
+        'name', 'slug', 'image')
+    search_fields = (
+        'name', 'slug', 'image')
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'image', 'price', 'subcategory', 'category')
-    search_fields = ('name', 'slug', 'image', 'price', 'subcategory', 'category')
+    list_display = (
+        'name', 'slug', 'image_original', 'price', 'subcategory', 'category')
+    search_fields = (
+        'name', 'slug', 'image_original', 'price', 'subcategory', 'category')
 
 
 admin.site.register(Category, CategoryAdmin)

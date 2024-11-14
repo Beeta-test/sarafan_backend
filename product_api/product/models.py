@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from versatileimagefield.fields import VersatileImageField, PPOIField
+from django.db import models
+from PIL import Image
+import os
 
 User = get_user_model()
 
@@ -43,8 +45,22 @@ class SubCategory(models.Model):
 class Product(models.Model):
     name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField('Идентицикатор', unique=True)
-    image = VersatileImageField('Изображение', upload_to='products/images')
-    ppoi = PPOIField()
+    image_original = models.ImageField(
+        'Оригинальное изображение',
+        upload_to='products/images'
+    )
+    image_resized = models.ImageField(
+        'Изображение 500x500',
+        upload_to='products/images/resized',
+        blank=True,
+        null=True
+    )
+    image_thumbnail = models.ImageField(
+        'Миниатюра 200x200',
+        upload_to='products/images/thumbnail',
+        blank=True,
+        null=True
+    )
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
     subcategory = models.ForeignKey(
         SubCategory,
@@ -56,6 +72,22 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name='products'
     )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.image_original:
+            self.create_resized_image(self.image_original.path, size=(500, 500), field='image_resized')
+            self.create_resized_image(self.image_original.path, size=(200, 200), field='image_thumbnail')
+            super().save(*args, **kwargs)
+
+    def create_resized_image(self, image_path, size, field):
+        base, ext = os.path.splitext(image_path)
+        resized_image_path = f"{base}_{size[0]}x{size[1]}{ext}"
+        with Image.open(image_path) as img:
+            img = img.resize(size, Image.ANTIALIAS)
+            img.save(resized_image_path, 'JPEG', quality=75)
+        setattr(self, field, resized_image_path.replace(os.path.dirname(self.image_original.name) + os.sep, ''))
 
     class Meta:
         verbose_name = 'Продукт'

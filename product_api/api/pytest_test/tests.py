@@ -1,8 +1,32 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from product.models import Product, ShoppingList
-from .conftest import product, subcategory, category
+
+from product.models import Product, ShoppingList, Category, SubCategory
+
+
+@pytest.fixture
+def category():
+    return Category.objects.create(name='Test Category', slug='test-category')
+
+
+@pytest.fixture
+def subcategory(category):
+    return SubCategory.objects.create(
+        name='Test SubCategory', slug='test-subcategory', category=category
+    )
+
+
+@pytest.fixture
+def product(subcategory, category):
+    return Product.objects.create(
+        name='Test Product',
+        slug='test-product',
+        image='path/to/image.jpg',
+        price='10.00',
+        subcategory=subcategory,
+        category=category
+    )
 
 
 @pytest.mark.django_db

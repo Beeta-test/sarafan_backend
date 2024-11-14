@@ -16,17 +16,10 @@ class SubCategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    image_small = serializers.ImageField(
-        source='image.thumbnail.100x100', read_only=True)
-    image_medium = serializers.ImageField(
-        source='image.thumbnail.300x300', read_only=True)
-    image_large = serializers.ImageField(
-        source='image.thumbnail.600x600', read_only=True)
-
     class Meta:
         model = Product
-        fields = ('id', 'name', 'slug', 'subcategory', 'category', 'price',
-                  'image_small', 'image_medium', 'image_large')
+        fields = ('id', 'name', 'slug', 'subcategory',
+                  'category', 'price', 'image')
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
