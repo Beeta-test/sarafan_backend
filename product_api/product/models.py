@@ -45,9 +45,16 @@ class SubCategory(models.Model):
 class Product(models.Model):
     name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField('Идентицикатор', unique=True)
+    author = models.ForeignKey(
+        User,
+        verbose_name='Автор',
+        on_delete=models.CASCADE,
+    )
     image_original = models.ImageField(
         'Оригинальное изображение',
-        upload_to='products/images'
+        upload_to='products/images',
+        blank=True,
+        null=True
     )
     image_resized = models.ImageField(
         'Изображение 500x500',

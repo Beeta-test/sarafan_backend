@@ -1,8 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
-from .views import (CategoryViewSet, SubCategoryViewSet,
-                    ProductViewSet, ShoppingListViewSet)
+from .views import (CategoryViewSet, SubCategoryViewSet, ProductViewSet)
 
 router = DefaultRouter()
 
@@ -22,12 +21,6 @@ router.register(
     'product',
     ProductViewSet,
     basename='product'
-)
-
-router.register(
-    'shopping_list',
-    ShoppingListViewSet,
-    basename='shoppinglist'
 )
 
 urlpatterns = [

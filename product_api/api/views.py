@@ -27,17 +27,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
-
-class ShoppingListViewSet(viewsets.ModelViewSet):
-    serializer_class = ShoppingListSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return ShoppingList.objects.filter(user=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
     def remove_item(self, model, request, pk=None):
         product = self.get_object()
         user = request.user
