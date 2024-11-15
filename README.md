@@ -20,8 +20,11 @@ git clone https://github.com/Beeta-test/product_api.git
 cd product_api
 
 Создайте виртуальное окружение и активируйте его:
+
 python -m venv venv
+
 source venv/bin/activate  # Для Linux/MacOS
+
 venv\Scripts\activate     # Для Windows
 
 Установите зависимости:
