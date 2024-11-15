@@ -30,6 +30,9 @@ pip install -r requirements.txt
 Примените миграции базы данных:
 python manage.py migrate
 
+Заполните базу данных данными из db.json:
+python manage.py loaddata db.json
+
 Создайте суперпользователя:
 python manage.py createsuperuser
 
