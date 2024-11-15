@@ -16,7 +16,7 @@ pytest для тестирования
 ## Установка
 
 Клонируйте репозиторий:
-git clone https://github.com/your_username/product_api.git
+git clone https://github.com/Beeta-test/product_api.git
 cd product_api
 
 Создайте виртуальное окружение и активируйте его:
