@@ -42,12 +42,16 @@ pytest
 
 # Использование API
 Основные маршруты
-Маршрут	Описание	Методы
 /api/category/	Управление категориями	GET, POST
+
 /api/subcategory/	Управление подкатегориями	GET, POST
+
 /api/product/	Управление товарами	GET, POST
+
 /api/shopping_list/	Список покупок	GET, POST
+
 /api/shopping_list/clear/	Очистка списка покупок	POST
+
 /swagger/ Добументация к API
 
 Примеры API-запросов
